@@ -1,23 +1,33 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class Bender {
     private Mapa mapa;
-    Map<Direccions, Vector> mapeig = new HashMap<Direccions, Vector>();
+    Map<Coordenades, Vector> mapeig = new HashMap<Coordenades, Vector>();
+    //List<HashMap<Coordenades,Vector>> mapeig = new ArrayList<HashMap<Coordenades, Vector>>();
 
-    public enum Direccions {
+    Coordenades[] prioritatActual = new Coordenades[4];
+
+    public enum Coordenades {
         S, E, N, W
     }
 
+    //Coordenades [] prioritatActual = new Coordenades[4];
     // Constructor: ens passen el mapa en forma d'String
     public Bender(String mapa) {
         this.mapa = new Mapa(mapa);
-        mapeig.put(Direccions.S, new Vector(1, 0));
-        mapeig.put(Direccions.E, new Vector(0, 1));
-        mapeig.put(Direccions.N, new Vector(-1, 0));
-        mapeig.put(Direccions.W, new Vector(0, -1));
+        //mapeig.add((HashMap<Coordenades, Vector>) new HashMap().put(Coordenades.S, new Vector(1, 0)));
+        //mapeig.add((HashMap<Coordenades, Vector>) new HashMap().put(Coordenades.E, new Vector(0, 1)));
+        //mapeig.add((HashMap<Coordenades, Vector>) new HashMap().put(Coordenades.N, new Vector(-1, 0)));
+        //mapeig.add((HashMap<Coordenades, Vector>) new HashMap().put(Coordenades.W, new Vector(0, -1)));
+        //System.out.println("Esto enseña un mapa " + mapeig.get(0));
+        mapeig.put(Coordenades.S, new Vector(1, 0));
+        mapeig.put(Coordenades.E, new Vector(0, 1));
+        mapeig.put(Coordenades.N, new Vector(-1, 0));
+        mapeig.put(Coordenades.W, new Vector(0, -1));
+        prioritatActual[0] = Coordenades.S;
+        prioritatActual[1] = Coordenades.E;
+        prioritatActual[2] = Coordenades.N;
+        prioritatActual[3] = Coordenades.W;
     }
 
     // Navegar fins a l'objectiu («$»).
@@ -28,26 +38,75 @@ class Bender {
     public String run() {
         String resultat = "";
         Mapa mapaActualitzat = new Mapa(mapa.getMapaString());
-        Direccions direccioBender = Direccions.S;
+        Coordenades direccioBender = Coordenades.S;
         int numeroPosicio = 0;
         System.out.println("Posicio inicial Bender " + mapaActualitzat.getPosicioBender());
         System.out.println("Posicio objectiu " + mapaActualitzat.getObjectiu());
-
+        System.out.println("-----------------");
 
         //System.out.println(mapeig.get(Direccions.SOUTH));
         while (!mapaActualitzat.getPosicioBender().equals(mapaActualitzat.getObjectiu())) {
-            if (mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getX()][mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getY()] != '#') {
+            System.out.println("Posicio actual bender: " + mapaActualitzat.getPosicioBender());
+            char objecteSeguent = mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getX()][mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getY()];
+            System.out.println("Objeto siguiente: " + objecteSeguent);
+            if (objecteSeguent == ' ' || objecteSeguent == '$') {
                 resultat = resultat + direccioBender.toString();
                 mapaActualitzat.setPosicioBender(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)));
                 System.out.println(mapaActualitzat.getPosicioBender());
+                numeroPosicio = -1;
 
-            } else {
+            } else if (objecteSeguent == '#') {
+                System.out.println(Arrays.toString(prioritatActual));
                 numeroPosicio++;
-                direccioBender = Direccions.values()[numeroPosicio];
+                //direccioBender = Coordenades.values()[numeroPosicio];
+                direccioBender = prioritatActual[numeroPosicio];
+            } else if (objecteSeguent == 'T') {
+                resultat += direccioBender.toString();
+                Iterator<Vector> itr = mapaActualitzat.getTeleportadors().iterator();
+                int selector = 0;
+                int aux = 0;
+
+                while (itr.hasNext()) {
+                    double distancia = 0;
+                    Vector actual = itr.next();
+                    System.out.println("Teleportador actual: " + actual);
+                    if (!actual.equals(new Vector(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getX(), mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getY()))) {
+
+                        selector = aux;
+                        distancia = actual.distanciaEuclidiana(mapaActualitzat.getPosicioBender());
+                    }
+                    aux++;
+                }
+
+                System.out.println("es transportara al següent punt: " + mapaActualitzat.getTeleportadors().get(selector));
+                mapaActualitzat.setPosicioBender(mapaActualitzat.getTeleportadors().get(selector));
+                //numeroPosicio = -1;
+            } else if (objecteSeguent == 'I') {
+                System.out.println(mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().getX()][mapaActualitzat.getPosicioBender().getY()]);
+                mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().getX()][mapaActualitzat.getPosicioBender().getY()] = ' ';
+
+                mapaActualitzat.setPosicioBender(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)));
+                resultat += direccioBender;
+                Coordenades[] novaPrioritat = inverteix();
+                System.arraycopy(novaPrioritat, 0, prioritatActual, 0, novaPrioritat.length);
+                direccioBender = prioritatActual[0];
             }
         }
 
         return resultat.toString();
+    }
+
+    public Coordenades[] inverteix() {
+        Coordenades[] ar = new Coordenades[prioritatActual.length];
+        Coordenades t = prioritatActual[2];
+        Coordenades t2 = prioritatActual[3];
+        ar[2] = prioritatActual[0];
+        ar[3] = prioritatActual[1];
+
+        ar[0] = t;
+        ar[1] = t2;
+
+        return ar;
     }
 
     public String bestRun() {
@@ -65,12 +124,26 @@ class Mapa {
 
     public Mapa(String mapa) {
         int totalCaracters = mapa.length();
-        int altura = 1;
+        int altura = 0;
         int amplada = 0;
 
 
+        /*
         while (mapa.charAt(amplada) == '#') {
             amplada++;
+        }
+        */
+
+        int actualAmplada = 0;
+        for (int i = 0; i < mapa.length(); i++) {
+            if (mapa.charAt(i) != '\n') {
+                actualAmplada++;
+            } else {
+                if (actualAmplada > amplada) {
+                    amplada = actualAmplada;
+                }
+                actualAmplada = 0;
+            }
         }
 
         while (amplada * altura < totalCaracters) {
@@ -78,10 +151,13 @@ class Mapa {
         }
         altura -= 1;
 
+        System.out.println("amplada: " + amplada);
+        System.out.println("altura: " + altura);
         this.mapaString = mapa;
         this.mapa = new char[altura][amplada];
 
         omplirMapa();
+        System.out.println("aaa" + getMapa());
     }
 
     private void omplirMapa() {
@@ -171,6 +247,10 @@ class Vector {
 
     public Vector opera(Vector v) {
         return new Vector(this.getX() + v.getX(), this.getY() + v.getY());
+    }
+
+    public double distanciaEuclidiana(Vector v) {
+        return Math.sqrt(Math.pow((v.x - this.x), 2) + Math.pow((v.y - this.y), 2));
     }
 
     @Override

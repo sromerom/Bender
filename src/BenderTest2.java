@@ -11,6 +11,9 @@ public class BenderTest2 {
         String mapa;
         Bender bender;
 
+        //1,2
+
+        //4,1
         mapa = "" +
                 "#######\n" +
                 "# X   #\n" +

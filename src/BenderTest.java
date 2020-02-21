@@ -224,9 +224,9 @@ public class BenderTest {
     }
 
     @Test
-    @Ignore
+    //@Ignore
     public void test15() {
-        // Impossible
+        // Impossible S
         String mapa = "" +
                 "#######\n" +
                 "# X   #\n" +

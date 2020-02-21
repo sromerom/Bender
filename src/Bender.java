@@ -41,6 +41,9 @@ class Bender {
         Mapa mapaActualitzat = new Mapa(mapa.getMapaString());
         Coordenades direccioBender = Coordenades.S;
         int numeroPosicio = 0;
+        int contadorMateixaLinea = 0;
+        int anteriorX = 0;
+        int anteriorY = 0;
 
         System.out.println("Posicio inicial Bender " + mapaActualitzat.getPosicioBender());
         System.out.println("Posicio objectiu " + mapaActualitzat.getObjectiu());
@@ -49,10 +52,27 @@ class Bender {
         //System.out.println(mapeig.get(Direccions.SOUTH));
         while (!mapaActualitzat.getPosicioBender().equals(mapaActualitzat.getObjectiu())) {
             System.out.println("Posicio actual bender: " + mapaActualitzat.getPosicioBender());
+
+            if (resultat.length() > 2) {
+                System.out.println("Y actual: " + mapaActualitzat.getPosicioBender().getY());
+                System.out.println("Y anterior: " + anteriorY);
+                if (anteriorY == mapaActualitzat.getPosicioBender().getY()) {
+                    contadorMateixaLinea++;
+                } else {
+                    contadorMateixaLinea = 0;
+                }
+            }
+
+            if (contadorMateixaLinea > mapaActualitzat.getMapa().length && contadorMateixaLinea > mapaActualitzat.getMapa()[0].length) {
+                return null;
+            }
             char objecteSeguent = mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getX()][mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getY()];
             System.out.println("Objeto siguiente: " + objecteSeguent);
             if (objecteSeguent == ' ' || objecteSeguent == '$' || objecteSeguent == 'X') {
                 resultat = resultat + direccioBender.toString();
+
+                anteriorX = mapaActualitzat.getPosicioBender().getX();
+                anteriorY = mapaActualitzat.getPosicioBender().getY();
                 mapaActualitzat.setPosicioBender(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)));
                 System.out.println(mapaActualitzat.getPosicioBender());
                 numeroPosicio = 0;

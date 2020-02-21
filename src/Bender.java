@@ -37,13 +37,17 @@ class Bender {
     // segons la posició del robot a cada moment.
     public String run() {
         System.out.println("Supuesto mapa: " + this.mapa);
-        String resultat = "";
+        //String resultat = "";
         Mapa mapaActualitzat = new Mapa(mapa.getMapaString());
         Coordenades direccioBender = Coordenades.S;
         int numeroPosicio = 0;
-        int contadorMateixaLinea = 0;
+        int maximRecorregutX = 0;
+        int maximRecorregutY = 0;
         int anteriorX = 0;
         int anteriorY = 0;
+        int teleportadorsAgafats = 0;
+        boolean shaMogut = false;
+        String resultat = "";
 
         System.out.println("Posicio inicial Bender " + mapaActualitzat.getPosicioBender());
         System.out.println("Posicio objectiu " + mapaActualitzat.getObjectiu());
@@ -53,17 +57,29 @@ class Bender {
         while (!mapaActualitzat.getPosicioBender().equals(mapaActualitzat.getObjectiu())) {
             System.out.println("Posicio actual bender: " + mapaActualitzat.getPosicioBender());
 
-            if (resultat.length() > 2) {
+            if (resultat.length() > 2 && shaMogut) {
                 System.out.println("Y actual: " + mapaActualitzat.getPosicioBender().getY());
                 System.out.println("Y anterior: " + anteriorY);
                 if (anteriorY == mapaActualitzat.getPosicioBender().getY()) {
-                    contadorMateixaLinea++;
+                    maximRecorregutY++;
                 } else {
-                    contadorMateixaLinea = 0;
+                    maximRecorregutY = 0;
+                }
+
+
+                if (anteriorX == mapaActualitzat.getPosicioBender().getX()) {
+                    maximRecorregutX++;
+                } else {
+                    maximRecorregutX = 0;
                 }
             }
 
-            if (contadorMateixaLinea > mapaActualitzat.getMapa().length && contadorMateixaLinea > mapaActualitzat.getMapa()[0].length) {
+            if (maximRecorregutX > (mapaActualitzat.getMapa().length * 2) && maximRecorregutX > (mapaActualitzat.getMapa()[0].length * 2)
+            || maximRecorregutY > (mapaActualitzat.getMapa().length * 2) && maximRecorregutY > (mapaActualitzat.getMapa()[0].length * 2)) {
+                return null;
+            }
+
+            if (teleportadorsAgafats > mapaActualitzat.getMapa().length * 2) {
                 return null;
             }
             char objecteSeguent = mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getX()][mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getY()];
@@ -74,15 +90,22 @@ class Bender {
                 anteriorX = mapaActualitzat.getPosicioBender().getX();
                 anteriorY = mapaActualitzat.getPosicioBender().getY();
                 mapaActualitzat.setPosicioBender(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)));
+                shaMogut = true;
                 System.out.println(mapaActualitzat.getPosicioBender());
                 numeroPosicio = 0;
 
             } else if (objecteSeguent == '#') {
+
+                if (numeroPosicio == 4) {
+                    return null;
+                }
                 System.out.println(Arrays.toString(prioritatActual));
                 //direccioBender = Coordenades.values()[numeroPosicio];
                 direccioBender = prioritatActual[numeroPosicio];
                 numeroPosicio++;
+                shaMogut = false;
             } else if (objecteSeguent == 'T') {
+                teleportadorsAgafats++;
                 resultat += direccioBender.toString();
                 Iterator<Vector> itr = mapaActualitzat.getTeleportadors().iterator();
                 int selector = 0;
@@ -110,16 +133,20 @@ class Bender {
 
                 System.out.println("es transportara al següent punt: " + mapaActualitzat.getTeleportadors().get(selector));
                 mapaActualitzat.setPosicioBender(mapaActualitzat.getTeleportadors().get(selector));
+                shaMogut = true;
                 //numeroPosicio = -1;
             } else if (objecteSeguent == 'I') {
                 System.out.println(mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().getX()][mapaActualitzat.getPosicioBender().getY()]);
                 mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().getX()][mapaActualitzat.getPosicioBender().getY()] = ' ';
 
+                anteriorX = mapaActualitzat.getPosicioBender().getX();
+                anteriorY = mapaActualitzat.getPosicioBender().getY();
                 mapaActualitzat.setPosicioBender(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)));
                 resultat += direccioBender;
                 Coordenades[] novaPrioritat = inverteix();
                 System.arraycopy(novaPrioritat, 0, prioritatActual, 0, novaPrioritat.length);
                 //direccioBender = prioritatActual[0];
+                shaMogut = true;
             }
         }
 

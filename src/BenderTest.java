@@ -326,4 +326,86 @@ public class BenderTest {
         Bender bender = new Bender(mapa);
         assertEquals("SSSSSSSSSSSSSEEENNNNNNNNNNNWWW", bender.run());
     }
+
+    //Tests meus
+
+    @Test
+    public void test20() {
+        String mapa = "" +
+                "#######\n" +
+                "#    $#\n" +
+                "#     #\n" +
+                "#     #\n" +
+                "#     #\n" +
+                "#######\n" +
+                "#X    #\n" +
+                "#######";
+        Bender bender = new Bender(mapa);
+        assertNull(bender.run());
+    }
+
+    @Test
+    public void test21() {
+        String mapa = "" +
+                "#######\n" +
+                "#    $#\n" +
+                "#     #\n" +
+                "#     #\n" +
+                "#     #\n" +
+                "#######\n" +
+                "#X#####\n" +
+                "#######";
+        Bender bender = new Bender(mapa);
+        assertNull(bender.run());
+    }
+
+    @Test
+    public void test22() {
+        String mapa = "" +
+                "#######\n" +
+                "#T    #\n" +
+                "##### #\n" +
+                "#T### #\n" +
+                "# ### #\n" +
+                "# ### #\n" +
+                "#X###$#\n" +
+                "#######";
+        Bender bender = new Bender(mapa);
+        assertEquals("NNNEEEESSSSS", bender.run());
+    }
+
+    @Test
+    @Ignore
+    public void test23() {
+        String mapa = "" +
+                "##############################\n" +
+                "#X                          T#\n" +
+                "##############################\n" +
+                "#T                           #\n" +
+                "##############################\n" +
+                "#                           T#\n" +
+                "##############################\n" +
+                "#T                           #\n" +
+                "##############################\n" +
+                "#                           T#\n" +
+                "##############################\n" +
+                "#T                           #\n" +
+                "##############################\n" +
+                "#$                          T#\n" +
+                "##############################";
+        Bender bender = new Bender(mapa);
+        assertNull(bender.run());
+    }
+
+
+    @Test
+    public void test25() {
+        String mapa = "" +
+                "#######################################################################################################\n" +
+                "#XT          T         T        T       T      T     T    T   T  T                                   $#\n" +
+                "######################################################################################################\n" +
+                "#######################################################################################################";
+        Bender bender = new Bender(mapa);
+        assertEquals("NNNEEEESSSSS", bender.run());
+    }
 }

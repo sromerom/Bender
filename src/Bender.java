@@ -57,6 +57,8 @@ class Bender {
         while (!mapaActualitzat.getPosicioBender().equals(mapaActualitzat.getObjectiu())) {
             System.out.println("Posicio actual bender: " + mapaActualitzat.getPosicioBender());
 
+
+
             if (resultat.length() > 2 && shaMogut) {
                 System.out.println("Y actual: " + mapaActualitzat.getPosicioBender().getY());
                 System.out.println("Y anterior: " + anteriorY);
@@ -82,6 +84,8 @@ class Bender {
             if (teleportadorsAgafats > mapaActualitzat.getMapa().length * 2) {
                 return null;
             }
+
+
             char objecteSeguent = mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getX()][mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getY()];
             System.out.println("Objeto siguiente: " + objecteSeguent);
             if (objecteSeguent == ' ' || objecteSeguent == '$' || objecteSeguent == 'X') {
@@ -113,10 +117,11 @@ class Bender {
                 double distanciaActual = 0;
                 double distanciaMinima = 0;
 
+                mapaActualitzat.setPosicioBender(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)));
                 while (itr.hasNext()) {
                     Vector actual = itr.next();
                     System.out.println("Teleportador actual: " + actual);
-                    if (!actual.equals(new Vector(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getX(), mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getY()))) {
+                    if (!actual.equals(new Vector(mapaActualitzat.getPosicioBender().getX(), mapaActualitzat.getPosicioBender().getY()))) {
                         distanciaActual = actual.distanciaEuclidiana(mapaActualitzat.getPosicioBender());
                         if (distanciaMinima == 0) { //6,4
                             distanciaMinima = distanciaActual;

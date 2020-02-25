@@ -128,7 +128,13 @@ class Bender {
                             selector = aux;
                         }
 
-                        if (distanciaActual < distanciaMinima) {
+                        if (distanciaActual == distanciaMinima) {
+                            System.out.println("Estan a la misma distancia!!!!");
+
+                            if (actual.getX() >= mapaActualitzat.getTeleportadors().get(selector).getX()) {
+                                if (actual.getY())
+                            }
+                        } else if(distanciaActual < distanciaMinima) {
                             distanciaMinima = distanciaActual;
                             selector = aux;
                         }

@@ -82,7 +82,8 @@ class Bender {
                 anteriorX = mapaActualitzat.getPosicioBender().getX();
                 anteriorY = mapaActualitzat.getPosicioBender().getY();
                 mapaActualitzat.setPosicioBender(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)));
-                shaMogut = true;;
+                shaMogut = true;
+                ;
                 numeroPosicio = 0;
 
             } else if (objecteSeguent == '#') {
@@ -169,8 +170,52 @@ class Bender {
         return ar;
     }
 
-    public String bestRun() {
-        return "";
+    public Vector aconseguiexTeleporter() {
+        return new Vector(0,0);
+    }
+
+    public int bestRun() {
+        Mapa mapaActualitzat = new Mapa(mapa.getMapaString());
+        System.out.println(mapaActualitzat.toString());
+        boolean[][] casellesActivades = new boolean[mapaActualitzat.getMapa().length][mapaActualitzat.getMapa()[0].length];
+        Queue<Estat> cua = new LinkedList<>();
+        Estat inicial = new Estat(mapaActualitzat.getPosicioBender().getX(), mapaActualitzat.getPosicioBender().getY(), 0);
+
+        cua.offer(inicial);
+
+        for (int i = 0; i < casellesActivades.length; i++) {
+            for (int j = 0; j < casellesActivades[0].length; j++) {
+                casellesActivades[i][j] = false;
+            }
+        }
+
+
+        int[] dx = new int[]{0, 0, 1, -1};
+        int[] dy = new int[]{1, -1, 0, 0};
+        while (!cua.isEmpty()) {
+            Estat actual = cua.poll();
+            if (mapaActualitzat.getMapa()[actual.getX()][actual.getY()] == '$') {
+                return actual.getD();
+            }
+
+            casellesActivades[actual.getX()][actual.getY()] = true;
+            for (int i = 0; i < 4; i++) {
+                int nx = dx[i] + actual.getX();
+                int ny = dy[i] + actual.getY();
+
+                if (mapaActualitzat.getMapa()[nx][ny] == 'T') {
+                    System.out.println("Teleporter!!!!!!");
+
+                }
+                if (nx >= 0 && nx < mapaActualitzat.getMapa().length && ny >= 0
+                        && ny < mapaActualitzat.getMapa()[0].length && mapaActualitzat.getMapa()[nx][ny] != '#' && !casellesActivades[nx][ny]) {
+                    Estat ady = new Estat(nx, ny, actual.getD() + 1);
+                    cua.offer(ady);
+                }
+            }
+        }
+
+        return 0;
     }
 }
 
@@ -386,5 +431,41 @@ class Vector {
 
     public void setX(int x) {
         this.x = x;
+    }
+}
+
+class Estat {
+    private int x;
+    private int y;
+    private int d;
+
+    public Estat(int x, int y, int d) {
+        this.x = x;
+        this.y = y;
+        this.d = d;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getD() {
+        return d;
+    }
+
+    public void setD(int d) {
+        this.d = d;
     }
 }

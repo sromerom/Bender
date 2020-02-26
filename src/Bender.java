@@ -36,7 +36,6 @@ class Bender {
     // els valors «S», «N», «W» o «E»,
     // segons la posició del robot a cada moment.
     public String run() {
-        System.out.println("Supuesto mapa: " + this.mapa);
         //String resultat = "";
         Mapa mapaActualitzat = new Mapa(mapa.getMapaString());
         Coordenades direccioBender = Coordenades.S;
@@ -49,18 +48,9 @@ class Bender {
         boolean shaMogut = false;
         String resultat = "";
 
-        System.out.println("Posicio inicial Bender " + mapaActualitzat.getPosicioBender());
-        System.out.println("Posicio objectiu " + mapaActualitzat.getObjectiu());
-        System.out.println("-----------------");
-
-        //System.out.println(mapeig.get(Direccions.SOUTH));
         while (!mapaActualitzat.getPosicioBender().equals(mapaActualitzat.getObjectiu())) {
-            System.out.println("Posicio actual bender: " + mapaActualitzat.getPosicioBender());
-
 
             if (resultat.length() > 2 && shaMogut) {
-                System.out.println("Y actual: " + mapaActualitzat.getPosicioBender().getY());
-                System.out.println("Y anterior: " + anteriorY);
                 if (anteriorY == mapaActualitzat.getPosicioBender().getY()) {
                     maximRecorregutY++;
                 } else {
@@ -86,15 +76,13 @@ class Bender {
 
 
             char objecteSeguent = mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getX()][mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getY()];
-            System.out.println("Objeto siguiente: " + objecteSeguent);
             if (objecteSeguent == ' ' || objecteSeguent == '$' || objecteSeguent == 'X') {
                 resultat = resultat + direccioBender.toString();
 
                 anteriorX = mapaActualitzat.getPosicioBender().getX();
                 anteriorY = mapaActualitzat.getPosicioBender().getY();
                 mapaActualitzat.setPosicioBender(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)));
-                shaMogut = true;
-                System.out.println(mapaActualitzat.getPosicioBender());
+                shaMogut = true;;
                 numeroPosicio = 0;
 
             } else if (objecteSeguent == '#') {
@@ -102,7 +90,6 @@ class Bender {
                 if (numeroPosicio == 4) {
                     return null;
                 }
-                System.out.println(Arrays.toString(prioritatActual));
                 //direccioBender = Coordenades.values()[numeroPosicio];
                 direccioBender = prioritatActual[numeroPosicio];
                 numeroPosicio++;
@@ -121,7 +108,6 @@ class Bender {
                 int ejeY = mapaActualitzat.getPosicioBender().getY();
                 while (itr.hasNext()) {
                     Vector actual = itr.next();
-                    System.out.println("Teleportador actual: " + actual);
                     if (!actual.equals(new Vector(mapaActualitzat.getPosicioBender().getX(), mapaActualitzat.getPosicioBender().getY()))) {
                         distanciaActual = actual.distanciaEuclidiana(mapaActualitzat.getPosicioBender());
                         if (distanciaMinima == 0) { //6,4
@@ -133,15 +119,8 @@ class Bender {
                             distanciaMinima = distanciaActual;
                             selector = aux;
                         } else if (distanciaActual == distanciaMinima && aux != 0) {
-                            System.out.println("Estan a la misma distancia!!!!");
+
                             Vector teleport = mapaActualitzat.getTeleportadors().get(selector);
-
-                            System.out.println("Teleport mas a prop fins ara: " + teleport);
-                            System.out.println("Teleport actual: " + actual);
-
-                            System.out.println("EjeX: " + ejeX);
-                            System.out.println("EjeY: " + ejeY);
-                            System.out.println(teleport.getX());
                             if (actual.getY() > teleport.getY()) {
                                 distanciaMinima = distanciaActual;
                                 selector = aux;
@@ -157,12 +136,10 @@ class Bender {
                     aux++;
                 }
 
-                System.out.println("es transportara al següent punt: " + mapaActualitzat.getTeleportadors().get(selector));
                 mapaActualitzat.setPosicioBender(mapaActualitzat.getTeleportadors().get(selector));
                 shaMogut = true;
                 //numeroPosicio = -1;
             } else if (objecteSeguent == 'I') {
-                System.out.println(mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().getX()][mapaActualitzat.getPosicioBender().getY()]);
                 mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().getX()][mapaActualitzat.getPosicioBender().getY()] = ' ';
 
                 anteriorX = mapaActualitzat.getPosicioBender().getX();
@@ -237,8 +214,6 @@ class Mapa {
         }
         altura++;
 
-        System.out.println("amplada: " + amplada);
-        System.out.println("altura: " + altura);
         this.mapaString = mapa;
         this.mapa = new char[altura][amplada];
 
@@ -301,8 +276,6 @@ class Mapa {
                 aux++;
             }
         }
-        System.out.println(Arrays.deepToString(this.mapa));
-        System.out.println();
     }
 
     @Override

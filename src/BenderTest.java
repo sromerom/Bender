@@ -330,6 +330,118 @@ public class BenderTest {
         assertEquals("SSSSSSSSSSSSSEEENNNNNNNNNNNWWW", bender.run());
     }
 
+    //Tests meus
+
+    @Test
+    public void test20() {
+        String mapa = "" +
+                "#######\n" +
+                "#    $#\n" +
+                "#     #\n" +
+                "#     #\n" +
+                "#     #\n" +
+                "#######\n" +
+                "#X    #\n" +
+                "#######";
+        Bender bender = new Bender(mapa);
+        assertNull(bender.run());
+    }
+
+    @Test
+    public void test21() {
+        String mapa = "" +
+                "#######\n" +
+                "#    $#\n" +
+                "#     #\n" +
+                "#     #\n" +
+                "#     #\n" +
+                "#######\n" +
+                "#X#####\n" +
+                "#######";
+        Bender bender = new Bender(mapa);
+        assertNull(bender.run());
+    }
+
+    @Test
+    public void test22() {
+        String mapa = "" +
+                "#######\n" +
+                "#T    #\n" +
+                "##### #\n" +
+                "#T### #\n" +
+                "# ### #\n" +
+                "# ### #\n" +
+                "#X###$#\n" +
+                "#######";
+        Bender bender = new Bender(mapa);
+        assertEquals("NNNEEEESSSSS", bender.run());
+    }
+
+    @Test
+    public void test23() {
+        String mapa = "" +
+                "##############################\n" +
+                "#X                          T#\n" +
+                "##############################\n" +
+                "#T                           #\n" +
+                "##############################\n" +
+                "#                           T#\n" +
+                "##############################\n" +
+                "#T                           #\n" +
+                "##############################\n" +
+                "#                           T#\n" +
+                "##############################\n" +
+                "#T                           #\n" +
+                "##############################\n" +
+                "#$                          T#\n" +
+                "##############################";
+        Bender bender = new Bender(mapa);
+        assertNull(bender.run());
+    }
+
+
+    @Test
+    public void test25() {
+        String mapa = "" +
+                "#######################################################################################################\n" +
+                "#XT          T         T        T       T      T     T    T   T  T                                   $#\n" +
+                "######################################################################################################\n" +
+                "#######################################################################################################";
+        Bender bender = new Bender(mapa);
+        assertEquals("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", bender.run());
+    }
+
+    @Test
+    public void test26() {
+        String mapa = "" +
+                "########\n" +
+                "#    X #\n" +
+                "#      #\n" +
+                "#  T T #\n" +
+                "#      #\n" +
+                "#    T #\n" +
+                "#    $ #\n" +
+                "########";
+        Bender bender = new Bender(mapa);
+        assertEquals("SSS", bender.run());
+    }
+
+    @Test
+    public void test27() {
+        String mapa = "" +
+                "########\n" +
+                "#  #X# #\n" +
+                "#      #\n" +
+                "#      #\n" +
+                "#      #\n" +
+                "#      #\n" +
+                "#   I $#\n" +
+                "########";
+        Bender bender = new Bender(mapa);
+        assertEquals("SSSSSNNNNNSSSSSEE", bender.run());
+    }
+
+
     @Test
     public void test28() {
         // Passa dues vegades pel mateix lloc
@@ -403,6 +515,24 @@ public class BenderTest {
         assertEquals("SSSSSEEEEEE", bender.run());
     }
 
+    @Test
+    public void test39() {
+        String mapa = "" +
+                "###########\n" +
+                "#    X    #\n" +
+                "#         #\n" +
+                "#         #\n" +
+                "#    T    #\n" +
+                "#  T   T  #\n" +
+                "#         #\n" +
+                "#        $#\n" +
+                "###########";
+        Bender bender = new Bender(mapa);
+        assertEquals("SSSSSEE", bender.run());
+    }
+
+
+
     static List<StringBuilder> constructMap(int sizex, int sizey) {
         List<StringBuilder> list = new ArrayList<>();
         StringBuilder s = new StringBuilder();
@@ -432,10 +562,10 @@ public class BenderTest {
 
     static String convertString(List<StringBuilder> list) {
         String finalMap = "";
-        for (int i = 0; i < list.size()-1; i++) {
+        for (int i = 0; i < list.size() - 1; i++) {
             finalMap += list.get(i).toString() + "\n";
         }
-        finalMap += list.get(list.size()-1);
+        finalMap += list.get(list.size() - 1);
         System.out.println(finalMap);
         return finalMap;
     }
@@ -447,7 +577,7 @@ public class BenderTest {
 
         List<StringBuilder> list = constructMap(SIZEX, SIZEY);
         list.get(1).setCharAt(6, 'X');
-        list.get(5).setCharAt(SIZEX-2, '$');
+        list.get(5).setCharAt(SIZEX - 2, '$');
 
         Bender bender = new Bender(convertString(list));
         assertEquals("SSSSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
@@ -461,123 +591,11 @@ public class BenderTest {
 
         List<StringBuilder> list = constructMap(SIZEX, SIZEY);
         list.get(1).setCharAt(6, 'X');
-        list.get(1).setCharAt(SIZEX-2, 'I');
+        list.get(1).setCharAt(SIZEX - 2, 'I');
         list.get(1).setCharAt(1, '$');
 
         Bender bender = new Bender(convertString(list));
         assertEquals("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
                 bender.run());
-    }
-    //Tests meus
-
-    @Test
-    public void test20() {
-        String mapa = "" +
-                "#######\n" +
-                "#    $#\n" +
-                "#     #\n" +
-                "#     #\n" +
-                "#     #\n" +
-                "#######\n" +
-                "#X    #\n" +
-                "#######";
-        Bender bender = new Bender(mapa);
-        assertNull(bender.run());
-    }
-
-    @Test
-    public void test21() {
-        String mapa = "" +
-                "#######\n" +
-                "#    $#\n" +
-                "#     #\n" +
-                "#     #\n" +
-                "#     #\n" +
-                "#######\n" +
-                "#X#####\n" +
-                "#######";
-        Bender bender = new Bender(mapa);
-        assertNull(bender.run());
-    }
-
-    @Test
-    public void test22() {
-        String mapa = "" +
-                "#######\n" +
-                "#T    #\n" +
-                "##### #\n" +
-                "#T### #\n" +
-                "# ### #\n" +
-                "# ### #\n" +
-                "#X###$#\n" +
-                "#######";
-        Bender bender = new Bender(mapa);
-        assertEquals("NNNEEEESSSSS", bender.run());
-    }
-
-    @Test
-    @Ignore
-    public void test23() {
-        String mapa = "" +
-                "##############################\n" +
-                "#X                          T#\n" +
-                "##############################\n" +
-                "#T                           #\n" +
-                "##############################\n" +
-                "#                           T#\n" +
-                "##############################\n" +
-                "#T                           #\n" +
-                "##############################\n" +
-                "#                           T#\n" +
-                "##############################\n" +
-                "#T                           #\n" +
-                "##############################\n" +
-                "#$                          T#\n" +
-                "##############################";
-        Bender bender = new Bender(mapa);
-        assertNull(bender.run());
-    }
-
-
-    @Test
-    public void test25() {
-        String mapa = "" +
-                "#######################################################################################################\n" +
-                "#XT          T         T        T       T      T     T    T   T  T                                   $#\n" +
-                "######################################################################################################\n" +
-                "#######################################################################################################";
-        Bender bender = new Bender(mapa);
-        assertEquals("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", bender.run());
-    }
-
-    @Test
-    @Ignore
-    public void test26() {
-        String mapa = "" +
-                "########\n" +
-                "#    X #\n" +
-                "#      #\n" +
-                "#  T T #\n" +
-                "#      #\n" +
-                "#    T #\n" +
-                "#    $ #\n" +
-                "########";
-        Bender bender = new Bender(mapa);
-        assertEquals("SSS", bender.run());
-    }
-
-    @Test
-    public void test27() {
-        String mapa = "" +
-                "########\n" +
-                "#  #X# #\n" +
-                "#      #\n" +
-                "#      #\n" +
-                "#      #\n" +
-                "#      #\n" +
-                "#   I $#\n" +
-                "########";
-        Bender bender = new Bender(mapa);
-        assertEquals("SSSSSNNNNNSSSSSEE", bender.run());
     }
 }

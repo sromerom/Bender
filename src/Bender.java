@@ -58,7 +58,6 @@ class Bender {
             System.out.println("Posicio actual bender: " + mapaActualitzat.getPosicioBender());
 
 
-
             if (resultat.length() > 2 && shaMogut) {
                 System.out.println("Y actual: " + mapaActualitzat.getPosicioBender().getY());
                 System.out.println("Y anterior: " + anteriorY);
@@ -77,7 +76,7 @@ class Bender {
             }
 
             if (maximRecorregutX > (mapaActualitzat.getMapa().length * 2) && maximRecorregutX > (mapaActualitzat.getMapa()[0].length * 2)
-            || maximRecorregutY > (mapaActualitzat.getMapa().length * 2) && maximRecorregutY > (mapaActualitzat.getMapa()[0].length * 2)) {
+                    || maximRecorregutY > (mapaActualitzat.getMapa().length * 2) && maximRecorregutY > (mapaActualitzat.getMapa()[0].length * 2)) {
                 return null;
             }
 
@@ -118,6 +117,8 @@ class Bender {
                 double distanciaMinima = 0;
 
                 mapaActualitzat.setPosicioBender(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)));
+                int ejeX = mapaActualitzat.getPosicioBender().getX();
+                int ejeY = mapaActualitzat.getPosicioBender().getY();
                 while (itr.hasNext()) {
                     Vector actual = itr.next();
                     System.out.println("Teleportador actual: " + actual);
@@ -128,15 +129,29 @@ class Bender {
                             selector = aux;
                         }
 
-                        if (distanciaActual == distanciaMinima) {
-                            System.out.println("Estan a la misma distancia!!!!");
-
-                            if (actual.getX() >= mapaActualitzat.getTeleportadors().get(selector).getX()) {
-                                if (actual.getY())
-                            }
-                        } else if(distanciaActual < distanciaMinima) {
+                        if (distanciaActual < distanciaMinima) {
                             distanciaMinima = distanciaActual;
                             selector = aux;
+                        } else if (distanciaActual == distanciaMinima && aux != 0) {
+                            System.out.println("Estan a la misma distancia!!!!");
+                            Vector teleport = mapaActualitzat.getTeleportadors().get(selector);
+
+                            System.out.println("Teleport mas a prop fins ara: " + teleport);
+                            System.out.println("Teleport actual: " + actual);
+
+                            System.out.println("EjeX: " + ejeX);
+                            System.out.println("EjeY: " + ejeY);
+                            System.out.println(teleport.getX());
+                            if (actual.getY() > teleport.getY()) {
+                                distanciaMinima = distanciaActual;
+                                selector = aux;
+                            } else if (actual.getY() > ejeY && actual.getY() == teleport.getY() && actual.getX() < teleport.getX()) {
+                                distanciaMinima = distanciaActual;
+                                selector = aux;
+                            } else if (actual.getY() < ejeY && actual.getY() == teleport.getY() && actual.getX() > teleport.getX()) {
+                                distanciaMinima = distanciaActual;
+                                selector = aux;
+                            }
                         }
                     }
                     aux++;
@@ -241,9 +256,6 @@ class Mapa {
                 */
 
 
-
-
-
     private void omplirMapa() {
         //System.out.println(this.mapaString.length());
         int aux = 0;
@@ -300,7 +312,7 @@ class Mapa {
         for (int i = 0; i < this.mapa.length; i++) {
             res += "\n";
             for (int j = 0; j < this.mapa[i].length; j++) {
-               res += this.mapa[i][j];
+                res += this.mapa[i][j];
             }
         }
         return res;

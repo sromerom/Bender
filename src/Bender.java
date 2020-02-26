@@ -1,10 +1,9 @@
 import java.util.*;
 
 class Bender {
-    private Mapa mapa;
+    private final Mapa mapa;
+    private Mapa mapaActualitzat;
     Map<Coordenades, Vector> mapeig = new HashMap<Coordenades, Vector>();
-    //List<HashMap<Coordenades,Vector>> mapeig = new ArrayList<HashMap<Coordenades, Vector>>();
-
     Coordenades[] prioritatActual = new Coordenades[4];
 
     public enum Coordenades {
@@ -15,11 +14,7 @@ class Bender {
     // Constructor: ens passen el mapa en forma d'String
     public Bender(String mapa) {
         this.mapa = new Mapa(mapa);
-        //mapeig.add((HashMap<Coordenades, Vector>) new HashMap().put(Coordenades.S, new Vector(1, 0)));
-        //mapeig.add((HashMap<Coordenades, Vector>) new HashMap().put(Coordenades.E, new Vector(0, 1)));
-        //mapeig.add((HashMap<Coordenades, Vector>) new HashMap().put(Coordenades.N, new Vector(-1, 0)));
-        //mapeig.add((HashMap<Coordenades, Vector>) new HashMap().put(Coordenades.W, new Vector(0, -1)));
-        //System.out.println("Esto enseña un mapa " + mapeig.get(0));
+        this.mapaActualitzat = new Mapa(mapa);
         mapeig.put(Coordenades.S, new Vector(1, 0));
         mapeig.put(Coordenades.E, new Vector(0, 1));
         mapeig.put(Coordenades.N, new Vector(-1, 0));
@@ -37,7 +32,7 @@ class Bender {
     // segons la posició del robot a cada moment.
     public String run() {
         //String resultat = "";
-        Mapa mapaActualitzat = new Mapa(mapa.getMapaString());
+        //Mapa mapaActualitzat = new Mapa(mapa.getMapaString());
         Coordenades direccioBender = Coordenades.S;
         int numeroPosicio = 0;
         int maximRecorregutX = 0;
@@ -98,46 +93,11 @@ class Bender {
             } else if (objecteSeguent == 'T') {
                 teleportadorsAgafats++;
                 resultat += direccioBender.toString();
-                Iterator<Vector> itr = mapaActualitzat.getTeleportadors().iterator();
-                int selector = 0;
-                int aux = 0;
-                double distanciaActual = 0;
-                double distanciaMinima = 0;
-
                 mapaActualitzat.setPosicioBender(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)));
-                int ejeX = mapaActualitzat.getPosicioBender().getX();
-                int ejeY = mapaActualitzat.getPosicioBender().getY();
-                while (itr.hasNext()) {
-                    Vector actual = itr.next();
-                    if (!actual.equals(new Vector(mapaActualitzat.getPosicioBender().getX(), mapaActualitzat.getPosicioBender().getY()))) {
-                        distanciaActual = actual.distanciaEuclidiana(mapaActualitzat.getPosicioBender());
-                        if (distanciaMinima == 0) { //6,4
-                            distanciaMinima = distanciaActual;
-                            selector = aux;
-                        }
 
-                        if (distanciaActual < distanciaMinima) {
-                            distanciaMinima = distanciaActual;
-                            selector = aux;
-                        } else if (distanciaActual == distanciaMinima && aux != 0) {
-
-                            Vector teleport = mapaActualitzat.getTeleportadors().get(selector);
-                            if (actual.getY() > teleport.getY()) {
-                                distanciaMinima = distanciaActual;
-                                selector = aux;
-                            } else if (actual.getY() > ejeY && actual.getY() == teleport.getY() && actual.getX() < teleport.getX()) {
-                                distanciaMinima = distanciaActual;
-                                selector = aux;
-                            } else if (actual.getY() < ejeY && actual.getY() == teleport.getY() && actual.getX() > teleport.getX()) {
-                                distanciaMinima = distanciaActual;
-                                selector = aux;
-                            }
-                        }
-                    }
-                    aux++;
-                }
-
-                mapaActualitzat.setPosicioBender(mapaActualitzat.getTeleportadors().get(selector));
+                Vector posicioNovaBender = aconseguiexTeleporter(mapaActualitzat.getPosicioBender());
+                mapaActualitzat.setPosicioBender(posicioNovaBender);
+                //mapaActualitzat.setPosicioBender(mapaActualitzat.getTeleportadors().get(selector));
                 shaMogut = true;
                 //numeroPosicio = -1;
             } else if (objecteSeguent == 'I') {
@@ -155,23 +115,6 @@ class Bender {
         }
 
         return resultat.toString();
-    }
-
-    public Coordenades[] inverteix() {
-        Coordenades[] ar = new Coordenades[prioritatActual.length];
-        Coordenades t = prioritatActual[2];
-        Coordenades t2 = prioritatActual[3];
-        ar[2] = prioritatActual[0];
-        ar[3] = prioritatActual[1];
-
-        ar[0] = t;
-        ar[1] = t2;
-
-        return ar;
-    }
-
-    public Vector aconseguiexTeleporter() {
-        return new Vector(0,0);
     }
 
     public int bestRun() {
@@ -205,9 +148,9 @@ class Bender {
 
                 if (mapaActualitzat.getMapa()[nx][ny] == 'T') {
                     System.out.println("Teleporter!!!!!!");
-
-                }
-                if (nx >= 0 && nx < mapaActualitzat.getMapa().length && ny >= 0
+                    Vector actualTeleporter = aconseguiexTeleporter(new Vector(actual.getX(), actual.getY()));
+                    System.out.println(actualTeleporter);
+                } else if (nx >= 0 && nx < mapaActualitzat.getMapa().length && ny >= 0
                         && ny < mapaActualitzat.getMapa()[0].length && mapaActualitzat.getMapa()[nx][ny] != '#' && !casellesActivades[nx][ny]) {
                     Estat ady = new Estat(nx, ny, actual.getD() + 1);
                     cua.offer(ady);
@@ -216,6 +159,62 @@ class Bender {
         }
 
         return 0;
+    }
+
+    public Coordenades[] inverteix() {
+        Coordenades[] ar = new Coordenades[prioritatActual.length];
+        Coordenades t = prioritatActual[2];
+        Coordenades t2 = prioritatActual[3];
+        ar[2] = prioritatActual[0];
+        ar[3] = prioritatActual[1];
+
+        ar[0] = t;
+        ar[1] = t2;
+
+        return ar;
+    }
+
+    public Vector aconseguiexTeleporter(Vector teleport) {
+        Iterator<Vector> itr = mapaActualitzat.getTeleportadors().iterator();
+        int selector = 0;
+        int aux = 0;
+        double distanciaActual = 0;
+        double distanciaMinima = 0;
+
+        int ejeX = teleport.getX();
+        int ejeY = teleport.getY();
+        while (itr.hasNext()) {
+            Vector actual = itr.next();
+            if (!actual.equals(new Vector(ejeX, ejeY))) {
+                distanciaActual = actual.distanciaEuclidiana(teleport);
+                if (distanciaMinima == 0) { //6,4
+                    distanciaMinima = distanciaActual;
+                    selector = aux;
+                }
+
+                if (distanciaActual < distanciaMinima) {
+                    distanciaMinima = distanciaActual;
+                    selector = aux;
+                } else if (distanciaActual == distanciaMinima && aux != 0) {
+
+                    Vector teleportFinal = mapaActualitzat.getTeleportadors().get(selector);
+                    if (actual.getY() > teleportFinal.getY()) {
+                        distanciaMinima = distanciaActual;
+                        selector = aux;
+                    } else if (actual.getY() > ejeY && actual.getY() == teleportFinal.getY() && actual.getX() < teleportFinal.getX()) {
+                        distanciaMinima = distanciaActual;
+                        selector = aux;
+                    } else if (actual.getY() < ejeY && actual.getY() == teleportFinal.getY() && actual.getX() > teleportFinal.getX()) {
+                        distanciaMinima = distanciaActual;
+                        selector = aux;
+                    }
+                }
+            }
+            aux++;
+        }
+
+        //mapaActualitzat.setPosicioBender(mapaActualitzat.getTeleportadors().get(selector));
+        return new Vector(mapaActualitzat.getTeleportadors().get(selector).getX(), mapaActualitzat.getTeleportadors().get(selector).getY());
     }
 }
 

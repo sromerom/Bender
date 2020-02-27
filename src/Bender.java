@@ -119,7 +119,6 @@ class Bender {
 
     public int bestRun() {
         Mapa mapaActualitzat = new Mapa(mapa.getMapaString());
-        System.out.println(mapaActualitzat.toString());
         boolean[][] casellesActivades = new boolean[mapaActualitzat.getMapa().length][mapaActualitzat.getMapa()[0].length];
         Queue<Estat> cua = new LinkedList<>();
         Estat inicial = new Estat(mapaActualitzat.getPosicioBender().getX(), mapaActualitzat.getPosicioBender().getY(), 0);
@@ -147,9 +146,9 @@ class Bender {
                 int ny = dy[i] + actual.getY();
 
                 if (mapaActualitzat.getMapa()[nx][ny] == 'T') {
-                    System.out.println("Teleporter!!!!!!");
-                    Vector actualTeleporter = aconseguiexTeleporter(new Vector(actual.getX(), actual.getY()));
-                    System.out.println(actualTeleporter);
+                    Vector actualTeleporter = aconseguiexTeleporter(new Vector(nx, ny));
+                    Estat ady = new Estat(actualTeleporter.getX(), actualTeleporter.getY(), actual.getD() + 1);
+                    cua.offer(ady);
                 } else if (nx >= 0 && nx < mapaActualitzat.getMapa().length && ny >= 0
                         && ny < mapaActualitzat.getMapa()[0].length && mapaActualitzat.getMapa()[nx][ny] != '#' && !casellesActivades[nx][ny]) {
                     Estat ady = new Estat(nx, ny, actual.getD() + 1);

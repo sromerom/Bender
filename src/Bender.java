@@ -3,12 +3,14 @@ import java.util.*;
 class Bender {
     private final Mapa mapa;
     private Mapa mapaActualitzat;
-    Map<Coordenades, Vector> mapeig = new HashMap<Coordenades, Vector>();
-    Coordenades[] prioritatActual = new Coordenades[4];
 
     public enum Coordenades {
         S, E, N, W
     }
+
+    private Map<Coordenades, Vector> mapeig = new HashMap<Coordenades, Vector>();
+    private Coordenades[] prioritatActual = new Coordenades[Coordenades.values().length];
+
 
     //Coordenades [] prioritatActual = new Coordenades[4];
     // Constructor: ens passen el mapa en forma d'String
@@ -31,54 +33,51 @@ class Bender {
     // els valors «S», «N», «W» o «E»,
     // segons la posició del robot a cada moment.
     public String run() {
-        //String resultat = "";
-        //Mapa mapaActualitzat = new Mapa(mapa.getMapaString());
+        String resultat = "";
         Coordenades direccioBender = Coordenades.S;
         int numeroPosicio = 0;
-        int maximRecorregutX = 0;
-        int maximRecorregutY = 0;
-        int anteriorX = 0;
-        int anteriorY = 0;
+        Vector maximRecorregut = new Vector(0, 0);
+        Vector anteriorPosicioBender = new Vector(0,0);
         int teleportadorsAgafats = 0;
         boolean shaMogut = false;
-        String resultat = "";
 
         while (!mapaActualitzat.getPosicioBender().equals(mapaActualitzat.getObjectiu())) {
 
-            if (resultat.length() > 2 && shaMogut) {
-                if (anteriorY == mapaActualitzat.getPosicioBender().getY()) {
-                    maximRecorregutY++;
+            if (shaMogut) {
+                if (anteriorPosicioBender.getY() == mapaActualitzat.getPosicioBender().getY()) {
+                    maximRecorregut.setY(maximRecorregut.getY() + 1);
+                    //maximRecorregutY++;
                 } else {
-                    maximRecorregutY = 0;
+                    maximRecorregut.setY(0);
+                    //maximRecorregutY = 0;
                 }
 
 
-                if (anteriorX == mapaActualitzat.getPosicioBender().getX()) {
-                    maximRecorregutX++;
+                if (anteriorPosicioBender.getX() == mapaActualitzat.getPosicioBender().getX()) {
+                    maximRecorregut.setX(maximRecorregut.getX() + 1);
+                    //maximRecorregutX++;
                 } else {
-                    maximRecorregutX = 0;
+                    maximRecorregut.setX(0);
                 }
             }
 
-            if (maximRecorregutX > (mapaActualitzat.getMapa().length * 2) && maximRecorregutX > (mapaActualitzat.getMapa()[0].length * 2)
-                    || maximRecorregutY > (mapaActualitzat.getMapa().length * 2) && maximRecorregutY > (mapaActualitzat.getMapa()[0].length * 2)) {
+            if (maximRecorregut.getX() > (mapaActualitzat.getMapa().length * 2) && maximRecorregut.getX() > (mapaActualitzat.getMapa()[0].length * 2)
+                    || maximRecorregut.getY() > (mapaActualitzat.getMapa().length * 2) && maximRecorregut.getY() > (mapaActualitzat.getMapa()[0].length * 2)) {
                 return null;
             }
+
 
             if (teleportadorsAgafats > mapaActualitzat.getMapa().length * 2) {
                 return null;
             }
 
-
             char objecteSeguent = mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getX()][mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)).getY()];
             if (objecteSeguent == ' ' || objecteSeguent == '$' || objecteSeguent == 'X') {
                 resultat = resultat + direccioBender.toString();
 
-                anteriorX = mapaActualitzat.getPosicioBender().getX();
-                anteriorY = mapaActualitzat.getPosicioBender().getY();
+                anteriorPosicioBender = mapaActualitzat.getPosicioBender();
                 mapaActualitzat.setPosicioBender(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)));
                 shaMogut = true;
-                ;
                 numeroPosicio = 0;
 
             } else if (objecteSeguent == '#') {
@@ -103,14 +102,13 @@ class Bender {
             } else if (objecteSeguent == 'I') {
                 mapaActualitzat.getMapa()[mapaActualitzat.getPosicioBender().getX()][mapaActualitzat.getPosicioBender().getY()] = ' ';
 
-                anteriorX = mapaActualitzat.getPosicioBender().getX();
-                anteriorY = mapaActualitzat.getPosicioBender().getY();
+                anteriorPosicioBender = mapaActualitzat.getPosicioBender();
                 mapaActualitzat.setPosicioBender(mapaActualitzat.getPosicioBender().opera(mapeig.get(direccioBender)));
+                shaMogut = true;
                 resultat += direccioBender;
                 Coordenades[] novaPrioritat = inverteix();
                 System.arraycopy(novaPrioritat, 0, prioritatActual, 0, novaPrioritat.length);
                 //direccioBender = prioritatActual[0];
-                shaMogut = true;
             }
         }
 
@@ -149,7 +147,7 @@ class Bender {
                     Vector actualTeleporter = aconseguiexTeleporter(new Vector(nx, ny));
                     Estat ady = new Estat(actualTeleporter.getX(), actualTeleporter.getY(), actual.getD() + 1);
                     cua.offer(ady);
-                } else if (nx >= 0 && nx < mapaActualitzat.getMapa().length && ny >= 0
+                } else if (nx < mapaActualitzat.getMapa().length
                         && ny < mapaActualitzat.getMapa()[0].length && mapaActualitzat.getMapa()[nx][ny] != '#' && !casellesActivades[nx][ny]) {
                     Estat ady = new Estat(nx, ny, actual.getD() + 1);
                     cua.offer(ady);

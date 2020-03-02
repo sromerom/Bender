@@ -132,7 +132,7 @@ class Bender {
             }
         }
 
-        return resultat.toString();
+        return resultat;
     }
 
     public int bestRun() {
@@ -252,12 +252,10 @@ class Bender {
                     if (actual.getY() > suposatTeleport.getY()) {
                         distanciaMinima = distanciaActual;
                         selector = aux;
-                    } else if (actual.getY() == suposatTeleport.getY() && actual.getY() > teleport.getY() && actual.getX() < suposatTeleport.getX()) {
-                        distanciaMinima = distanciaActual;
-                        selector = aux;
                     } else if (actual.getY() == suposatTeleport.getY() && actual.getY() < teleport.getX() && actual.getX() > suposatTeleport.getX()) {
                         distanciaMinima = distanciaActual;
                         selector = aux;
+                        System.out.println("aaa");
                     }
                 }
             }

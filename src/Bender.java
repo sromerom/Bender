@@ -167,13 +167,6 @@ class Bender {
             casellesActivades[actual.getX()][actual.getY()] = true;
 
             //Ara toca veure els següent adjacent de l'actual Estat. Farem un bucle per aconseguir aquest quatre adjacents (nomes podem aconseguir 4 adjacents).
-            //
-            //@ = Adjacents per aconseguir
-            //X = Coordenades Estat actual
-            //
-            // @
-            //@X@
-            // @
 
             //Recorrem adjacents
             for (int i = 0; i < 4; i++) {
@@ -255,7 +248,6 @@ class Bender {
                     } else if (actual.getY() == suposatTeleport.getY() && actual.getY() < teleport.getX() && actual.getX() > suposatTeleport.getX()) {
                         distanciaMinima = distanciaActual;
                         selector = aux;
-                        System.out.println("aaa");
                     }
                 }
             }
